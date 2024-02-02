@@ -1,22 +1,25 @@
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Schedule {
     private DayOfWeek dateOfWeek;
     private int startTime;
     private int endTime;
 
-    Map<String, Teacher> teacherSchedule;
+    private Teacher teacher;
 
-    public Schedule(DayOfWeek dateOfWeek, int startTime, int endTime) {
+    public Schedule(DayOfWeek dateOfWeek, int startTime, int endTime, Teacher teacher) {
         this.dateOfWeek = dateOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.teacherSchedule = new HashMap<>();
+        this.teacher = teacher;
     }
 
-    public void setTeacherSchedule(String subject, Teacher teacher) {
-        teacherSchedule.put(subject,teacher);
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public Schedule() {
@@ -48,19 +51,14 @@ public class Schedule {
         this.endTime = endTime;
     }
 
-    public Map<String, Teacher> getTeacherSchedule() {
-        return teacherSchedule;
-    }
-
-
 
     @Override
     public String toString() {
         return "Schedule{" +
-                "dateOfWeek='" + dateOfWeek + '\'' +
+                "dateOfWeek=" + dateOfWeek +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", teacherSchedule=" + teacherSchedule +
+                " teacher: id= "+ teacher.getId() +" name: "+teacher.getName()+
                 '}';
     }
 }

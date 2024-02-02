@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Teacher {
+    private int id;
     private String name;
     private List<Availability> availabilities;
     private List<Subject> subjects;
@@ -11,10 +12,11 @@ public class Teacher {
         return availabilities;
     }
 
-    public Teacher(String name) {
+    public Teacher(int id, String name) {
+        this.id = id+1;
         this.name = name;
-        this.subjects = new ArrayList<>();
-        this.availabilities = new ArrayList<>();
+        availabilities = new ArrayList<>();
+        subjects = new ArrayList<>();
     }
 
     public void setAvailabilities(Availability availability) {
@@ -30,6 +32,10 @@ public class Teacher {
     }
 
     public Teacher() {
+    }
+
+    public int getId() {
+        return id;
     }
 
 
@@ -50,6 +56,7 @@ public class Teacher {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("Teacher: ");
+        stringBuilder.append("id='").append(id).append('\'');
         stringBuilder.append("name='").append(name).append('\'');
 
         if (availabilities.isEmpty()) {

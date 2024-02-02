@@ -1,4 +1,3 @@
-import javax.print.attribute.standard.SheetCollate;
 import java.io.IOException;
 import java.util.*;
 
@@ -7,18 +6,21 @@ public class Task {
     List<Teacher> teacherList= new ArrayList<>();
     List<Subject> subjectList= new ArrayList<>();
 
-
+    List<Schedule> scheduleList = new ArrayList<>();
 
     Subject subject= new Subject("Math");
     Subject subject2= new Subject("Physic");
 
-
+    int id=1;
 
     public void displayMenu() {
-        Teacher teacher = new Teacher("Mann");
+        Teacher teacher = new Teacher(0,"Mann");
         teacherList.add(teacher);
 
-
+        Availability availabilitMorning= new Availability(DayOfWeek.MONDAY,8,12);
+        Availability availabilityAfternoon= new Availability(DayOfWeek.MONDAY,1,5);
+        teacher.setAvailabilities(availabilitMorning);
+        teacher.setAvailabilities(availabilityAfternoon);
         subjectList.add(subject);
         subjectList.add(subject2);
 
@@ -105,7 +107,6 @@ public class Task {
 
                     }
                     case 2 -> {
-                        boolean case2Flag = true;
                         try {
                             do {
                                 System.out.println("==== Subject Section ====");
@@ -132,15 +133,20 @@ public class Task {
                                     break;
                                 } else {
                                     System.out.println("please select the valid number.");
+
                                 }
-                            } while (case2Flag);
+                            } while (true);
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid input! Please enter an integer.");
+                            scanner.nextLine();
+                            scanner.nextLine();
+
                         }
                     }
                     case 3 -> assignSubjectToTeacher();
                     case 4 -> setTeacherAvailability();
                     case 5 -> generateSchedule();
+
                     case 6 -> viewSchedule();
                     default -> System.out.println("Invalid option. Please choose a valid option.");
 
@@ -264,7 +270,7 @@ public class Task {
             }
         }
         if(!nameRedundancy){
-            Teacher teacher1= new Teacher(teacherName);
+            Teacher teacher1= new Teacher(id++,teacherName);
             teacherList.add(teacher1);
             System.out.println("Teacher "+teacher1.getName()+" added successfully.");
 
@@ -449,7 +455,6 @@ public class Task {
             }
         }if(bb) {
             System.out.println("==================================================================================================================================================================================================================================");
-
             System.out.println("teacher cannot be found 🥲.");
             scanner.nextLine();
             System.out.println("==================================================================================================================================================================================================================================");
@@ -459,16 +464,79 @@ public class Task {
 
     }
 
-    private void generateSchedule() {
+    private boolean validDayOfWeek(String dayOfWeek){
 
-        Schedule schedule = new Schedule(DayOfWeek.MONDAY,12,14);
-        schedule.setTeacherSchedule("Math",new Teacher("kha mann"));
-        System.out.println(schedule);
+        try {
+            DayOfWeek day = DayOfWeek.valueOf(dayOfWeek.toUpperCase());
+            System.out.println(dayOfWeek + " is a valid day of the week.");
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(dayOfWeek + " is not a valid day of the week.");
+            return false;
+
+        }
+    }
+
+    private void generateSchedule() {
+        System.out.println("=== Schedule Generator ===");
+        System.out.println("enter teacher name: ");
+        String teacherName= scanner.nextLine();
+
+        for(Teacher teacher: teacherList){
+            if(teacher.getName().equalsIgnoreCase(teacherName)){
+                System.out.println(teacher.getAvailabilities());
+
+                System.out.println("enter the teaching day (monday-sunday):  ");
+                String dayOfWeek= scanner.nextLine().toUpperCase();
+                validDayOfWeek(dayOfWeek);
+
+                System.out.println("enter the teaching start time (24-hour format):  ");
+                int startTime= scanner.nextInt();
+                if(startTime<1||startTime>24){
+                    System.out.println("Please input the correct time 1-23 format");
+                }
+                System.out.println("enter the teaching end time (24-hour format): ");
+                int endTime= scanner.nextInt();
+                if(endTime<1||endTime>24){
+                    System.out.println("Please input the correct time 1-23 format");
+                }
+
+                boolean check= false;
+                for(Availability availability: teacher.getAvailabilities()){
+                    if((availability.getStartTime() <= startTime && availability.getStartTime() < endTime )||
+                      (      (availability.getEndTime() > startTime) && availability.getEndTime() <= endTime)
+                    ){
+                        Schedule schedule = new Schedule(DayOfWeek.valueOf(dayOfWeek),startTime,endTime,teacher);
+                        System.out.println(schedule+" NIce  ahafhasiofhasihfiahgiashsaghg0qa");
+                        break;
+                    }
+                }if(check){
+                    System.out.println("teacher "+teacher.getName()+" is busy at that time, please kindly check for another time.");
+
+                }
+
+            }
+
+//            for(Availability availability : teacher.getAvailabilities()){
+//                System.out.println(availability);
+//            }
+        }
+
 
     }
 
 
     private void viewSchedule() {
+
+        if(scheduleList.isEmpty() ){
+            System.out.println("lol null");
+        }else{
+            for(Schedule schedule:scheduleList){
+
+                System.out.println(schedule);
+            }
+        }
+
 
     }
 
