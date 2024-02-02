@@ -10,3 +10,11 @@ public class Utils {
         System.out.println("7. Exit");
     }
 }
+public void assignSubjectToTeacher(String teacherName, String subjectName) {
+    if (teachers.contains(teacherName) && subjects.contains(subjectName)) {
+        subjectAssignments.put(teacherName, subjectName);
+        System.out.println("Subject assigned to teacher: " + subjectName + " -> " + teacherName);
+    } else {
+        System.out.println("Teacher or subject does not exist. Please add them first.");
+    }
+}
