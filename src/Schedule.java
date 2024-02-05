@@ -1,18 +1,23 @@
 
 
 public class Schedule {
+    private int id ;
     private DayOfWeek dateOfWeek;
     private int startTime;
     private int endTime;
 
     private Teacher teacher;
+    private String subject;
 
-    public Schedule(DayOfWeek dateOfWeek, int startTime, int endTime, Teacher teacher) {
+    public Schedule(int id, DayOfWeek dateOfWeek, int startTime, int endTime, Teacher teacher, String subject) {
+        this.id=id+1;
         this.dateOfWeek = dateOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
         this.teacher = teacher;
+        this.subject = subject;
     }
+
 
     public Teacher getTeacher() {
         return teacher;
@@ -55,9 +60,11 @@ public class Schedule {
     @Override
     public String toString() {
         return "Schedule{" +
-                "dateOfWeek=" + dateOfWeek +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                " id= " + id+
+                ", subject= " + subject.toUpperCase()+
+                ", dateOfWeek= " + dateOfWeek +
+                ", startTime= " + startTime +
+                ", endTime= " + endTime +
                 " teacher: id= "+ teacher.getId() +" name: "+teacher.getName()+
                 '}';
     }

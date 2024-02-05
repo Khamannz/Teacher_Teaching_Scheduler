@@ -27,8 +27,8 @@ public class Teacher {
         return subjects;
     }
 
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
+    public void setSubjects(Subject subject) {
+        subjects.add(subject);
     }
 
     public Teacher() {
@@ -57,7 +57,7 @@ public class Teacher {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("Teacher: ");
         stringBuilder.append("id='").append(id).append('\'');
-        stringBuilder.append("name='").append(name).append('\'');
+        stringBuilder.append(", name='").append(name).append('\'');
 
         if (availabilities.isEmpty()) {
             stringBuilder.append(", availabilities=No data");
@@ -69,19 +69,14 @@ public class Teacher {
         if (subjects.isEmpty()) {
             stringBuilder.append(", subjects=No data");
         } else {
-                stringBuilder.append(", subjects=").append(subjects);
+            for(Subject subject: subjects){
+                stringBuilder.append(", subjects=").append(subject.getName());
+            }
         }
         stringBuilder.append('.');
         return stringBuilder.toString();
     }
 
 
-//    @Override
-//    public String toString() {
-//        return "Teacher: " +
-//                "name='" + name + '\'' +
-//                ", availabilities=" + availabilities +
-//                ", subjects=" + subjects +
-//                '.';
-//    }
+
 }

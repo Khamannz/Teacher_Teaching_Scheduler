@@ -1,7 +1,10 @@
 public class Availability {
+
     private DayOfWeek dateOfWeek;
     private int startTime;
     private int endTime;
+
+    boolean availability = true;
 
     public Availability(DayOfWeek dateOfWeek, int startTime, int endTime) {
         this.dateOfWeek = dateOfWeek;
@@ -38,12 +41,33 @@ public class Availability {
         this.endTime = endTime;
     }
 
+    public boolean isAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
     @Override
     public String toString() {
-        return "Availability{" +
-                "dateOfWeek=" + dateOfWeek +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                '}';
+
+        if(availability){
+            return "Availability{" +
+                    "dateOfWeek=" + dateOfWeek +
+                    ", startTime=" + startTime +
+                    ", endTime=" + endTime +
+                    ", available="+" ✅"+
+                    '}';
+        }
+        else {
+            return "Availability{" +
+                    "dateOfWeek=" + dateOfWeek +
+                    ", startTime=" + startTime +
+                    ", endTime=" + endTime +
+                    ", unavailable=" +" ❌"+
+                    '}';
+        }
+
     }
 }
