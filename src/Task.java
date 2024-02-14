@@ -25,7 +25,7 @@ public class Task {
         teacher.setSubjects(defaultSubject);
         defaultSubject.setAvailable(false);
         Availability availabilitMorning= new Availability(DayOfWeek.MONDAY,8,12);
-        Availability availabilityAfternoon= new Availability(DayOfWeek.MONDAY,1,5);
+        Availability availabilityAfternoon= new Availability(DayOfWeek.MONDAY,14,17);
         Availability availability3= new Availability(DayOfWeek.WEDNESDAY,7,11);
 
         teacher.setAvailabilities(availabilitMorning);
@@ -59,8 +59,8 @@ public class Task {
             System.out.println("4. Set Teacher Availability");
             System.out.println("5. Generate Schedules");
             System.out.println("6. View Schedules");
-            System.out.println("7. Delete Schedule");
-
+            System.out.println("7. Delete Schedule By Id");
+            System.out.println("8, Edit Schedule By Id");
             System.out.println("0. Exit");
 
 
@@ -88,7 +88,7 @@ public class Task {
                                     System.out.println("==== Teacher Section ====");
                                     System.out.println("1. Add Teacher");
                                     System.out.println("2. Edit Teacher By Name");
-                                    System.out.println("3. View Teacher");
+                                    System.out.println("3. View All Teacher");
                                     System.out.println("4. Search Teacher By Name");
                                     System.out.println("5. Delete Teacher");
                                     System.out.println("0. Back");
@@ -172,7 +172,8 @@ public class Task {
                     case 5 -> generateSchedule();
 
                     case 6 -> viewSchedule();
-//                    case 7 -> deleteSchedule();
+                    case 7 -> deleteScheduleById();
+                    case 8 -> editScheduleById();
 
                     default -> System.out.println("Invalid option. Please choose a valid option.");
 
@@ -189,6 +190,8 @@ public class Task {
         }while(flag);
 
     }
+
+
 
 
 
@@ -510,7 +513,7 @@ public class Task {
                           sub.setAvailable(false);
                           teacher.setSubjects(sub);
                           System.out.println("==================================================================================================================================================================================================================================");
-                          System.out.println("Subject "+sub.getName()+ " have successfully set to teacher "+teacher.getName()+" ❤️" );
+                          System.out.println("Subject "+sub.getName()+ " have successfully set to teacher "+teacher.getName() );
                           tempCheck=true;
                       }
                     else{
@@ -640,10 +643,6 @@ public class Task {
                        scanner.nextLine();
                 }
                 loopCheckOut2=true;
-
-
-
-
                     }
 
                 }
@@ -652,9 +651,6 @@ public class Task {
             scanner.nextLine();
         }
         }
-
-
-
 
 
     private void viewSchedule() {
@@ -675,11 +671,115 @@ public class Task {
                 System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
             scanner.nextLine();
+        }
+    }
 
+
+    private void editScheduleById() {
+
+        System.out.println("enter the schedule id to update : ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        boolean check=false;
+
+        if(scheduleList.isEmpty()){
+            System.out.println("==================================================================================================================================================================================================================================");
+
+            System.out.println("Opps, the schedule list is currently empty.");
         }
 
+        for(Schedule schedule: scheduleList){
+            if(schedule.getId()== id){
+
+                System.out.println("==================================================================================================================================================================================================================================");
+                System.out.println(schedule);
+                System.out.println("==================================================================================================================================================================================================================================");
+                System.out.println("input the new subject");
+                String inputSubject= scanner.nextLine();
+                boolean subjectCheck=false;
+                for(Subject subject: schedule.getTeacher().getSubjects()){
+                    if(subject.getName().equalsIgnoreCase(inputSubject)){
+
+                        System.out.println("input new schedule day : ");
+                        String dayOfWeek= scanner.nextLine().toUpperCase();
+                        while(!validDayOfWeek(dayOfWeek)){
+                            System.out.println("enter the new schedule day (monday-sunday):  ");
+                            dayOfWeek= scanner.nextLine().toUpperCase();
+                        }
+                        schedule.setDateOfWeek(DayOfWeek.valueOf(dayOfWeek));
+                        System.out.println("enter the teaching start time (24-hour format):  ");
+                        int startTime= scanner.nextInt();
+                        scanner.nextLine();
+                        while(!validTimeFormat(startTime)){
+                            System.out.println("Please input the correct start time in 24-hour format");
+                            startTime= scanner.nextInt();
+                        }
+                        System.out.println("enter the teaching end time (24-hour format):  ");
+                        int endTime= scanner.nextInt();
+                        scanner.nextLine();
+                        while(!validTimeFormat(endTime)){
+                            System.out.println("Please input the correct end time in 24-hour format");
+                            endTime= scanner.nextInt();
+                        }
+
+                        if(startTime>endTime){
+                            System.out.println("Opps, start time cannot higher than end time please double check.");
+                        }
+
+//                        schedule.setSubject(inputSubject);
+//                        schedule.setStartTime(startTime);
+//                        schedule.setEndTime(endTime);
+//                        schedule.set
+
+
+
+                        subjectCheck=true;
+                    }
+                }
+
+                if(!subjectCheck){
+                    System.out.println("Opps, please input the correct subject of teacher "+schedule.getTeacher().getName());
+                }
+
+            }
+        }
 
     }
+
+    private void deleteScheduleById() {
+        System.out.println("enter the schedule id to delete: ");
+        int id= scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("==================================================================================================================================================================================================================================");
+
+        if (scheduleList.isEmpty()) {
+            System.out.println("The schedule list is empty. There are no schedules to delete.");
+            return;
+        }
+
+        Iterator<Schedule> scheduleIterator= scheduleList.iterator();
+        while(scheduleIterator.hasNext()){
+            Schedule schedule = scheduleIterator.next();
+            if(schedule.getId()==id){
+                for(Availability availability: schedule.getTeacher().availabilities()){
+                    availability.setAvailability(true);
+                }
+                scheduleIterator.remove();
+                System.out.println("==================================================================================================================================================================================================================================");
+
+                System.out.println("This schedule have been deleted successfully.");
+                break;
+
+            }
+            if (!scheduleIterator.hasNext()) {
+                System.out.println("==================================================================================================================================================================================================================================");
+                System.out.println("schedule not found in the list really😭.");
+
+            }
+        }
+
+    }
+
 
 
 
